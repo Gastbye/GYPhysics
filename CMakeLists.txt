@@ -34,7 +34,7 @@ else()
     )
 endif()
 
-find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+find_package(Eigen3 REQUIRED NO_MODULE)
 
 include(CTest)
 include(cmake/GyPhysicsWarnings.cmake)
