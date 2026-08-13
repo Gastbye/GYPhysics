@@ -81,7 +81,7 @@ cmake --build build-double --target gyphysics_rigid
 | Math | `GyPhysics::Math` | `gy::physics::math` |
 | Rigid | `GyPhysics::Rigid` | `gy::physics::rigid` |
 
-`RigidBody` 不直接使用 `Eigen::Vector3d` 或 `Eigen::Vector3f`，而统一使用：
+`RigidBody` do not use `Eigen::Vector3d` or `Eigen::Vector3f`, use：
 
 ```cpp
 gy::physics::math::Real
@@ -90,5 +90,26 @@ gy::physics::math::Matrix3
 gy::physics::math::Quaternion
 ```
 
-因此切换 `GY_PHYSICS_REAL_TYPE` 时，整个项目的标量和 Eigen 固定尺寸类型会一起
-切换。不要在同一个进程里链接分别用 FLOAT 和 DOUBLE 编译的 GyPhysics 模块。
+Windows Compile and Install:
+Download MSYS2, and open MSYS2 UCRT64.
+Install the latest packages in MSYS2 UCRT64. If it suggests close terminal, close and reopen it:
+```bash
+pacman -Syu
+```
+
+Install the required packages:
+```bash
+pacman -S --needed \
+    mingw-w64-ucrt-x86_64-toolchain \
+    mingw-w64-ucrt-x86_64-cmake \
+    mingw-w64-ucrt-x86_64-ninja \
+    mingw-w64-ucrt-x86_64-eigen3
+```
+
+Suggest use Tsinghua mirror:
+```bash
+sed -i "s#https\?://mirror.msys2.org/#https://mirrors.tuna.tsinghua.edu.cn/msys2/#g" /etc/pacman.d/mirrorlist*
+grep -n "tuna" /etc/pacman.d/mirrorlist*
+pacman -Syyu
+pacman -Syu
+```
