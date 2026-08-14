@@ -103,7 +103,8 @@ pacman -S --needed \
     mingw-w64-ucrt-x86_64-toolchain \
     mingw-w64-ucrt-x86_64-cmake \
     mingw-w64-ucrt-x86_64-ninja \
-    mingw-w64-ucrt-x86_64-eigen3
+    mingw-w64-ucrt-x86_64-eigen3 \
+    mingw-w64-ucrt-x86_64-clang-tools-extra
 ```
 
 Suggest use Tsinghua mirror:
