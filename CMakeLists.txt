@@ -40,6 +40,7 @@ include(CTest)
 include(cmake/GyPhysicsWarnings.cmake)
 
 add_subdirectory(modules/math)
+add_subdirectory(modules/geometry)
 add_subdirectory(modules/rigid)
 
 if(GY_PHYSICS_BUILD_EXAMPLES)

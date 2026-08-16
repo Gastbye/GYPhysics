@@ -32,6 +32,7 @@ using Index = std::uint32_t;
 using Vector2 = Eigen::Matrix<Real, 2, 1>;
 using Vector3 = Eigen::Matrix<Real, 3, 1>;
 using Vector4 = Eigen::Matrix<Real, 4, 1>;
+using IntV3 = Eigen::Matrix<Index, 3, 1>;
 
 using Matrix2 = Eigen::Matrix<Real, 2, 2>;
 using Matrix3 = Eigen::Matrix<Real, 3, 3>;
