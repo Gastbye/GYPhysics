@@ -43,6 +43,14 @@ using Quaternion = Eigen::Quaternion<Real>;
 inline constexpr Real kZero = static_cast<Real>(0);
 inline constexpr Real kOne = static_cast<Real>(1);
 inline constexpr Real kEpsilon = std::numeric_limits<Real>::epsilon();
+inline constexpr Index InvalidIndex = std::numeric_limits<Index>::max();
+
+[[nodiscard]] inline constexpr bool isValidIndex(
+    const Index index) noexcept
+{
+    return index != InvalidIndex;
+}
+
 
 static_assert(
     std::is_same_v<Real, float> || std::is_same_v<Real, double>,

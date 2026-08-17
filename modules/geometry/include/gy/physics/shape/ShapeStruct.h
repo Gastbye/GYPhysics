@@ -8,9 +8,6 @@
 
 namespace gy::physics::geometry {
 
-// Compatibility alias for the name used by the initial geometry draft.
-using TriangleIndices = math::IntV3;
-
 struct SolidGeometryProperties
 {
     math::Real volume{math::kZero};
