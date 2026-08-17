@@ -1,5 +1,6 @@
 add_library(
     gyphysics_geometry
+    src/ShapeRegistry.cpp
     src/TriMeshData.cpp
 )
 add_library(GyPhysics::Geometry ALIAS gyphysics_geometry)

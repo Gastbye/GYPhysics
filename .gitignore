@@ -23,6 +23,7 @@ Makefile
 # IDE
 .vscode/
 .idea/
+.codex-build-temp/
 
 # Temporary files
 *.tmp
