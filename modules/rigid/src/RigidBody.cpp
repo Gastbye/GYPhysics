@@ -1,4 +1,5 @@
 #include "gy/physics/rigid/RigidBody.h"
+#include "gy/physics/math/MathOperators.h"
 
 #include <algorithm>
 #include <cmath>
@@ -195,6 +196,16 @@ void RigidBody::setState(const RigidBodyState& state)
 void RigidBody::addForce(const math::Vector3& force) noexcept
 {
     accumulatedForce_ += force;
+}
+
+void RigidBody::addForce(const math::Vector3& force, const math::Vector3& position) noexcept
+{
+    accumulatedForce_ += force;
+
+    const math::Vector3 leverArm =
+        position - worldCenterOfMass();
+    accumulatedTorque_ +=
+        math::cross(leverArm, force);
 }
 
 void RigidBody::addTorque(const math::Vector3& torque) noexcept

@@ -10,6 +10,14 @@ namespace gy::physics::rigid {
 
 class RigidBody;
 
+void integrateVelocities(
+    RigidBody& body,
+    math::Real timeStep);
+
+void integratePose(
+    RigidBody& body,
+    math::Real timeStep);
+
 void integrateRigidBody(
     RigidBody& body,
     math::Real timeStep);

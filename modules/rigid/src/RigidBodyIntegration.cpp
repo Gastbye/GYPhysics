@@ -8,7 +8,7 @@
 
 namespace gy::physics::rigid {
 
-void integrateRigidBody(
+void integrateVelocities(
     RigidBody& body,
     math::Real timeStep)
 {
@@ -28,9 +28,6 @@ void integrateRigidBody(
     state.linearVelocity +=
         linearAcceleration * timeStep;
 
-    state.position +=
-        state.linearVelocity * timeStep;
-
     const math::Vector3 angularAcceleration =
         body.inverseInertiaTensorWorldAtCenterOfMass()
         * body.accumulatedTorque();
@@ -39,6 +36,31 @@ void integrateRigidBody(
         angularAcceleration * timeStep;
 
     body.clearForceAndTorque();
+}
+    
+void integratePose(
+    RigidBody& body,
+    math::Real timeStep)
+{
+    if (!std::isfinite(timeStep)
+        || timeStep <= math::kZero) {
+        throw std::invalid_argument(
+            "Rigid-body time step must be finite and positive."
+        );
+    }
+
+    RigidBodyState& state = body.state();
+
+    state.position +=
+        state.linearVelocity * timeStep;
+}
+
+void integrateRigidBody(
+    RigidBody& body,
+    math::Real timeStep)
+{
+    integrateVelocities(body, timeStep);
+    integratePose(body, timeStep);
 }
 
 } // namespace gy::physics::rigid

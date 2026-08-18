@@ -35,6 +35,7 @@ public:
 
     // Accumulated force and torque are expressed in world-space axes.
     void addForce(const math::Vector3& force) noexcept;
+    void addForce(const math::Vector3& force, const math::Vector3& position) noexcept;
     void addTorque(const math::Vector3& torque) noexcept;
     void clearForceAndTorque() noexcept;
 
