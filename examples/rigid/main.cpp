@@ -71,7 +71,7 @@ int main()
             density * tetrahedron->unitDensityInertiaAtCentroid();
         desc.initialState.position = math::Vector3(
             math::Real{2} * static_cast<math::Real>(index % bodiesPerRow),
-            math::Real{2} * static_cast<math::Real>(index / bodiesPerRow),
+            math::Real{2} * static_cast<math::Real>(int(index / bodiesPerRow)),
             math::Real{0}
         );
 

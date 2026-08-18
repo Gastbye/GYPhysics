@@ -26,9 +26,9 @@ public:
     [[nodiscard]] bool contains(
         BodyId id) const noexcept;
 
-    // Returns true only when the body exists and is active.
+    // Throws std::out_of_range if the body does not exist.
     [[nodiscard]] bool isActive(
-        BodyId id) const noexcept;
+        BodyId id) const;
 
     // An inactive body remains registered and can still be accessed.
     void setActive(BodyId id, bool active);
@@ -44,7 +44,8 @@ public:
     [[nodiscard]] bool empty() const noexcept;
 
     /*
-     * Do not add or remove bodies while executing the callback.
+     * Do not call add() or remove() directly from this callback; doing so
+     * modifies the container and can invalidate references and iteration.
      * References passed to the callback must not be retained across
      * modifications of the registry.
      */

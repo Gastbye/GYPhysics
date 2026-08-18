@@ -34,6 +34,11 @@ public:
         return volume_;
     }
 
+    [[nodiscard]] math::Vector3 centroid() const noexcept
+    {
+        return math::Vector3::Zero();
+    }
+
 private:
     [[nodiscard]] static math::Real validatedRadius(math::Real radius)
     {

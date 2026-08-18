@@ -67,16 +67,9 @@ bool RigidBodyRegistry::contains(
 }
 
 bool RigidBodyRegistry::isActive(
-    BodyId id) const noexcept
+    BodyId id) const
 {
-    if (!contains(id)) {
-        return false;
-    }
-
-    const std::size_t index =
-        static_cast<std::size_t>(id.value);
-
-    return activeFlags_[index];
+    return activeFlags_[checkedIndex(id)];
 }
 
 void RigidBodyRegistry::setActive(
@@ -105,10 +98,10 @@ void RigidBodyRegistry::remove(BodyId id)
     const std::size_t index = checkedIndex(id);
 
     if (activeFlags_[index]) {
-        activeFlags_[index] = false;
         --activeBodyCount_;
     }
 
+    activeFlags_[index] = false;
     bodies_[index].reset();
     --bodyCount_;
 }

@@ -44,6 +44,40 @@ void requireThrows(Function&& function, const std::string& message)
     return rigid::RigidBody(desc);
 }
 
+void requireMissingIdOperationsThrow(
+    rigid::RigidBodyRegistry& registry,
+    rigid::BodyId id,
+    const std::string& description)
+{
+    require(!registry.contains(id),
+            description + " must not be contained.");
+    requireThrows<std::out_of_range>(
+        [&registry, id] { static_cast<void>(registry.get(id)); },
+        description + " get() must throw."
+    );
+    const rigid::RigidBodyRegistry& constRegistry = registry;
+    requireThrows<std::out_of_range>(
+        [&constRegistry, id] {
+            static_cast<void>(constRegistry.get(id));
+        },
+        description + " const get() must throw."
+    );
+    requireThrows<std::out_of_range>(
+        [&constRegistry, id] {
+            static_cast<void>(constRegistry.isActive(id));
+        },
+        description + " isActive() must throw."
+    );
+    requireThrows<std::out_of_range>(
+        [&registry, id] { registry.setActive(id, false); },
+        description + " setActive() must throw."
+    );
+    requireThrows<std::out_of_range>(
+        [&registry, id] { registry.remove(id); },
+        description + " remove() must throw."
+    );
+}
+
 void testDefaultStateAndInvalidAccess()
 {
     static_assert(!std::is_convertible_v<math::Index, rigid::BodyId>);
@@ -52,7 +86,7 @@ void testDefaultStateAndInvalidAccess()
             rigid::BodyId{}
         )
     ));
-    static_assert(noexcept(
+    static_assert(!noexcept(
         std::declval<const rigid::RigidBodyRegistry&>().isActive(
             rigid::BodyId{}
         )
@@ -70,31 +104,10 @@ void testDefaultStateAndInvalidAccess()
             "A new registry must have size zero.");
     require(registry.activeCount() == std::size_t{0},
             "A new registry must have no active bodies.");
-    require(!registry.contains(invalidId),
-            "A registry cannot contain the default BodyId.");
-    require(!registry.contains(outOfRangeId),
-            "A registry cannot contain an out-of-range BodyId.");
-    require(!registry.isActive(invalidId),
-            "An invalid BodyId cannot be active.");
-    require(!registry.isActive(outOfRangeId),
-            "An out-of-range BodyId cannot be active.");
-
-    requireThrows<std::out_of_range>(
-        [&registry, invalidId] {
-            static_cast<void>(registry.get(invalidId));
-        },
-        "Getting the default BodyId must throw."
-    );
-    requireThrows<std::out_of_range>(
-        [&registry, outOfRangeId] {
-            registry.setActive(outOfRangeId, false);
-        },
-        "Changing an out-of-range BodyId must throw."
-    );
-    requireThrows<std::out_of_range>(
-        [&registry, invalidId] { registry.remove(invalidId); },
-        "Removing the default BodyId must throw."
-    );
+    requireMissingIdOperationsThrow(
+        registry, invalidId, "The default BodyId");
+    requireMissingIdOperationsThrow(
+        registry, outOfRangeId, "An out-of-range BodyId");
 }
 
 void testAddLookupAndStableIds()
@@ -128,9 +141,11 @@ void testAddLookupAndStableIds()
     require(registry.get(firstId).mass() == math::Real{2},
             "Mutable lookup returned the wrong body.");
 
-    registry.get(firstId).state().linearVelocity = math::Vector3(
+    rigid::RigidBodyState updatedState = registry.get(firstId).state();
+    updatedState.linearVelocity = math::Vector3(
         math::Real{7}, math::Real{8}, math::Real{9}
     );
+    registry.get(firstId).setState(updatedState);
     const rigid::RigidBodyRegistry& constRegistry = registry;
     require(constRegistry.get(firstId).state().linearVelocity.isApprox(
                 math::Vector3(math::Real{7}, math::Real{8}, math::Real{9})),
@@ -214,6 +229,19 @@ void testActivationAndIteration()
             "Reactivation or its idempotence changed the count incorrectly.");
     require(registry.isActive(ids[1]),
             "A reactivated body must report as active.");
+
+    std::size_t reactivatedVisitCount = 0;
+    registry.forEachActive(
+        [&reactivatedVisitCount, reactivatedId = ids[1]](
+            rigid::BodyId id,
+            rigid::RigidBody&) {
+            if (id == reactivatedId) {
+                ++reactivatedVisitCount;
+            }
+        }
+    );
+    require(reactivatedVisitCount == std::size_t{1},
+            "A reactivated body did not rejoin active iteration.");
 }
 
 void testRemovalAndNoIdReuse()
@@ -241,24 +269,10 @@ void testRemovalAndNoIdReuse()
     require(!registry.contains(removedActiveId)
                 && !registry.contains(removedInactiveId),
             "Removed BodyIds must no longer be contained.");
-    require(!registry.isActive(removedActiveId),
-            "A removed body cannot be active.");
-    requireThrows<std::out_of_range>(
-        [&registry, removedActiveId] {
-            static_cast<void>(registry.get(removedActiveId));
-        },
-        "Getting a removed BodyId must throw."
-    );
-    requireThrows<std::out_of_range>(
-        [&registry, removedInactiveId] {
-            registry.setActive(removedInactiveId, true);
-        },
-        "Reactivating a removed BodyId must throw."
-    );
-    requireThrows<std::out_of_range>(
-        [&registry, removedActiveId] { registry.remove(removedActiveId); },
-        "Removing the same BodyId twice must throw."
-    );
+    requireMissingIdOperationsThrow(
+        registry, removedActiveId, "A removed active BodyId");
+    requireMissingIdOperationsThrow(
+        registry, removedInactiveId, "A removed inactive BodyId");
 
     const rigid::BodyId newId = registry.add(makeBody(
         math::Real{5}, math::Vector3::Zero()));
@@ -267,6 +281,19 @@ void testRemovalAndNoIdReuse()
     require(!registry.contains(removedActiveId),
             "Appending a body made an old BodyId valid again.");
     require(registry.contains(newId), "The appended body is unavailable.");
+
+    std::vector<rigid::BodyId> visitedIds;
+    registry.forEachActive(
+        [&visitedIds](rigid::BodyId id, rigid::RigidBody&) {
+            visitedIds.push_back(id);
+        }
+    );
+    require(visitedIds.size() == std::size_t{3},
+            "Iteration did not skip removed body slots.");
+    require(visitedIds[0] == firstId
+                && visitedIds[1] == lastId
+                && visitedIds[2] == newId,
+            "Iteration visited a removed body or changed ID order.");
 
     registry.remove(firstId);
     registry.remove(lastId);

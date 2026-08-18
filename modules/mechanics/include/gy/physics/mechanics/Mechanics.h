@@ -12,12 +12,12 @@ struct MassProperties
 {
     math::Real mass{math::kOne};
 
-    // Center of mass of the body: local coordinates.
+    // Center of mass in the body's reference local coordinate system.
     math::Vector3 centerOfMassLocalPosition{
         math::Vector3::Zero()
     };
 
-    // Inertia tensor at the center of mass of the body: local coordinates.
+    // Inertia tensor about the center of mass, expressed in body-local axes.
     math::Matrix3 inertiaTensorLocalAtCenterOfMass{
         math::Matrix3::Identity()
     };
