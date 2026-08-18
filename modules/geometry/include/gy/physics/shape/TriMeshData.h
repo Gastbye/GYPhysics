@@ -109,8 +109,6 @@ public:
     [[nodiscard]] const math::Matrix3&
     unitDensityInertiaAtCentroid() const;
 
-    // Returned by value because solidGeometryProperties_ is the sole
-    // authoritative cache; a second optional volume could diverge from it.
     [[nodiscard]] std::optional<math::Real>
     volumeOptional() const noexcept
     {

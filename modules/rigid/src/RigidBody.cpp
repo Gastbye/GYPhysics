@@ -8,8 +8,10 @@ namespace gy::physics::rigid {
 
 RigidBody::RigidBody(const RigidBodyDesc& desc)
 {
-    setMass(desc.mass);
-    setInertiaTensor(desc.inertiaTensor);
+    setMass(desc.massProperties.mass);
+    setInertiaTensor(
+        desc.massProperties.inertiaTensorLocalAtCenterOfMass
+    );
     setState(desc.initialState);
 }
 

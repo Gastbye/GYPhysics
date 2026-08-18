@@ -2,7 +2,7 @@
 
 A general-purpose physics engine.
 
-## current structure
+## Current structure
 
 ```text
 GyPhysics/
@@ -11,8 +11,42 @@ GyPhysics/
 │   └── GyPhysicsWarnings.cmake
 ├── modules/
 │   ├── math/
-│   │   ├── include/gy/physics/math/MathTypes.h
-│   │   └── tests/MathTypesTest.cpp
+│   │   ├── include/gy/physics/math/
+│   │   │   ├── MathTypes.h
+│   │   │   ├── MathOperators.h
+│   │   │   └── QuaternionOperators.h
+│   │   └── tests/
+│   │       ├── MathTypesTest.cpp
+│   │       ├── MathOperatorsTest.cpp
+│   │       └── QuaternionOperatorsTest.cpp
+│   ├── geometry/
+│   │   ├── include/gy/physics/shape/
+│   │   │   ├── Shape.h
+│   │   │   ├── ShapeStruct.h
+│   │   │   ├── ShapeRegistry.h
+│   │   │   ├── SphereShape.h
+│   │   │   ├── TriMeshShape.h
+│   │   │   └── TriMeshData.h
+│   │   ├── src/
+│   │   │   ├── ShapeRegistry.cpp
+│   │   │   └── TriMeshData.cpp
+│   │   └── tests/
+│   │       ├── GeometryTest.cpp
+│   │       ├── ShapeRegistryTest.cpp
+│   │       └── SolidGeometryPropertiesTest.cpp
+│   ├── material/
+│   │   ├── include/gy/physics/material/
+│   │   │   ├── Material.h
+│   │   │   ├── MaterialStruct.h
+│   │   │   └── MaterialRegistry.h
+│   │   ├── src/
+│   │   │   ├── Material.cpp
+│   │   │   └── MaterialRegistry.cpp
+│   │   └── tests/
+│   │       ├── MaterialTest.cpp
+│   │       └── MaterialRegistryTest.cpp
+│   ├── mechanics/
+│   │   └── include/gy/physics/mechanics/Mechanics.h
 │   └── rigid/
 │       ├── include/gy/physics/rigid/RigidBody.h
 │       ├── src/RigidBody.cpp
@@ -79,6 +113,9 @@ cmake --build build-double --target gyphysics_rigid
 | 模块 | CMake 目标 | C++ 命名空间 |
 |---|---|---|
 | Math | `GyPhysics::Math` | `gy::physics::math` |
+| Geometry | `GyPhysics::Geometry` | `gy::physics::geometry` |
+| Material | `GyPhysics::Material` | `gy::physics::material` |
+| Mechanics | `GyPhysics::Mechanics` | `gy::physics::mechanics` |
 | Rigid | `GyPhysics::Rigid` | `gy::physics::rigid` |
 
 `RigidBody` do not use `Eigen::Vector3d` or `Eigen::Vector3f`, use：

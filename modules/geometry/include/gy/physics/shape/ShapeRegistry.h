@@ -16,11 +16,8 @@ namespace gy::physics::geometry {
 class ShapeRegistry
 {
 public:
-    // ShapeId remains stable across additions.
     [[nodiscard]] ShapeId add(std::unique_ptr<const Shape> shape);
 
-    // References returned by get() must not be retained across registry
-    // mutations.
     [[nodiscard]] const Shape&
     get(ShapeId id) const;
 
@@ -29,14 +26,10 @@ public:
 
     void remove(ShapeId id);
 
-    // Returns the number of currently registered shapes, excluding removed
-    // slots.
     [[nodiscard]] std::size_t size() const noexcept;
     [[nodiscard]] bool empty() const noexcept;
 
 private:
-    // Slots are never erased or reused: every issued ID keeps one meaning for
-    // the lifetime of this registry.
     std::vector<std::unique_ptr<const Shape>> shapes_;
     std::size_t size_{0};
 };

@@ -11,9 +11,11 @@ namespace gy::physics::geometry {
 struct SolidGeometryProperties
 {
     math::Real volume{math::kZero};
+
+    // Geometric centroid of the shape: local coordinates.
     math::Vector3 centroid{math::Vector3::Zero()};
 
-    // Unit-density inertia tensor about the geometric centroid.
+    // Unit-density inertia tensor about the geometric centroid: local coordinates.
     math::Matrix3 unitDensityInertiaAtCentroid{math::Matrix3::Zero()};
 };
 

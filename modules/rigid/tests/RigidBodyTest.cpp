@@ -9,8 +9,9 @@ int main()
     namespace rigid = gy::physics::rigid;
 
     rigid::RigidBodyDesc desc;
-    desc.mass = static_cast<math::Real>(2);
-    desc.inertiaTensor = static_cast<math::Real>(3)
+    desc.massProperties.mass = static_cast<math::Real>(2);
+    desc.massProperties.inertiaTensorLocalAtCenterOfMass =
+        static_cast<math::Real>(3)
         * math::Matrix3::Identity();
     desc.initialState.position = math::Vector3(
         static_cast<math::Real>(1),

@@ -11,7 +11,7 @@ target_include_directories(
         $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(gyphysics_rigid PUBLIC GyPhysics::Math)
+target_link_libraries(gyphysics_rigid PUBLIC GyPhysics::Math GyPhysics::Mechanics)
 target_compile_features(gyphysics_rigid PUBLIC cxx_std_17)
 gyphysics_enable_warnings(gyphysics_rigid)
 

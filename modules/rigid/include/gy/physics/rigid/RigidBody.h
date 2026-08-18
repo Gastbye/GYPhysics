@@ -5,6 +5,7 @@
 #pragma once
 
 #include "gy/physics/math/MathTypes.h"
+#include "gy/physics/mechanics/Mechanics.h"
 
 namespace gy::physics::rigid {
 
@@ -18,8 +19,7 @@ struct RigidBodyState
 
 struct RigidBodyDesc
 {
-    math::Real mass{math::kOne};
-    math::Matrix3 inertiaTensor{math::Matrix3::Identity()};
+    mechanics::MassProperties massProperties{};
     RigidBodyState initialState{};
 };
 

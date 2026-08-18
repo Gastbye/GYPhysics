@@ -12,10 +12,7 @@ enum class ShapeType : std::uint8_t
 {
     None = 0,
     Sphere = 1,
-    TriangleMesh = 2,
-
-    // Kept as a source-compatible spelling for the initial geometry draft.
-    TriMesh = TriangleMesh,
+    TriangleMesh = 2, TriMesh = TriangleMesh,
     Box = 3,
 };
 

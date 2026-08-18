@@ -41,8 +41,9 @@ include(cmake/GyPhysicsWarnings.cmake)
 
 add_subdirectory(modules/math)
 add_subdirectory(modules/geometry)
-add_subdirectory(modules/rigid)
 add_subdirectory(modules/material)
+add_subdirectory(modules/mechanics)
+add_subdirectory(modules/rigid)
 
 if(GY_PHYSICS_BUILD_EXAMPLES)
     add_subdirectory(examples)
