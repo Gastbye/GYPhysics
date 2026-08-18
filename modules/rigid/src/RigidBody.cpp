@@ -177,6 +177,11 @@ RigidBody::inverseInertiaTensorLocalAtCenterOfMass() const noexcept
     return inverseInertiaTensorLocalAtCenterOfMass_;
 }
 
+RigidBodyState& RigidBody::state() noexcept
+{
+    return state_;
+}
+
 const RigidBodyState& RigidBody::state() const noexcept
 {
     return state_;

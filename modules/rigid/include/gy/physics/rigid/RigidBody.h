@@ -4,31 +4,11 @@
 
 #pragma once
 
+#include "gy/physics/rigid/RigidBodyStruct.h"
 #include "gy/physics/math/MathTypes.h"
 #include "gy/physics/mechanics/Mechanics.h"
 
 namespace gy::physics::rigid {
-
-struct RigidBodyState
-{
-    // World-space position of the center of mass.
-    math::Vector3 position{math::Vector3::Zero()};
-
-    // Rotation from the body-local coordinate system to world space.
-    math::Quaternion orientation{math::Quaternion::Identity()};
-
-    // Center-of-mass linear velocity expressed in world-space axes.
-    math::Vector3 linearVelocity{math::Vector3::Zero()};
-
-    // Angular velocity expressed in world-space axes.
-    math::Vector3 angularVelocity{math::Vector3::Zero()};
-};
-
-struct RigidBodyDesc
-{
-    mechanics::MassProperties massProperties{};
-    RigidBodyState initialState{};
-};
 
 class RigidBody
 {
@@ -49,6 +29,7 @@ public:
     [[nodiscard]] const math::Matrix3&
     inverseInertiaTensorLocalAtCenterOfMass() const noexcept;
 
+    [[nodiscard]] RigidBodyState& state() noexcept;
     [[nodiscard]] const RigidBodyState& state() const noexcept;
     void setState(const RigidBodyState& state);
 
