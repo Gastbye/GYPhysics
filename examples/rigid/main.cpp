@@ -1,26 +1,95 @@
+#include <cstddef>
 #include <iostream>
+#include <memory>
+#include <utility>
+#include <vector>
 
-#include "gy/physics/rigid/RigidBody.h"
+#include "gy/physics/rigid/RigidBodyRegistry.h"
+#include "gy/physics/shape/ShapeRegistry.h"
+#include "gy/physics/shape/TriMeshShape.h"
+
+namespace {
+
+namespace geometry = gy::physics::geometry;
+namespace math = gy::physics::math;
+namespace rigid = gy::physics::rigid;
+
+struct RigidBodyInstance
+{
+    rigid::BodyId bodyId;
+    geometry::ShapeId shapeId;
+};
+
+[[nodiscard]] std::shared_ptr<const geometry::TriMeshData>
+makeTetrahedron()
+{
+    geometry::TriMeshData::VertexContainer vertices{
+        math::Vector3(math::Real{0}, math::Real{0}, math::Real{0}),
+        math::Vector3(math::Real{1}, math::Real{0}, math::Real{0}),
+        math::Vector3(math::Real{0}, math::Real{1}, math::Real{0}),
+        math::Vector3(math::Real{0}, math::Real{0}, math::Real{1})
+    };
+    geometry::TriMeshData::TriangleContainer triangles{
+        math::IntV3(math::Index{1}, math::Index{2}, math::Index{3}),
+        math::IntV3(math::Index{0}, math::Index{2}, math::Index{1}),
+        math::IntV3(math::Index{0}, math::Index{1}, math::Index{3}),
+        math::IntV3(math::Index{0}, math::Index{3}, math::Index{2})
+    };
+
+    return std::make_shared<const geometry::TriMeshData>(
+        std::move(vertices), std::move(triangles));
+}
+
+} // namespace
 
 int main()
 {
-    namespace math = gy::physics::math;
-    namespace rigid = gy::physics::rigid;
+    constexpr std::size_t bodyCount = 20;
+    constexpr std::size_t bodiesPerRow = 5;
 
-    rigid::RigidBodyDesc desc;
-    desc.massProperties.mass = static_cast<math::Real>(2.5);
-    desc.initialState.position = math::Vector3(
-        static_cast<math::Real>(1),
-        static_cast<math::Real>(2),
-        static_cast<math::Real>(3)
+    geometry::ShapeRegistry shapeRegistry;
+    rigid::RigidBodyRegistry bodyRegistry;
+
+    const std::shared_ptr<const geometry::TriMeshData> tetrahedron =
+        makeTetrahedron();
+    const geometry::ShapeId tetrahedronShapeId = shapeRegistry.add(
+        std::make_unique<geometry::TriMeshShape>(tetrahedron)
     );
 
-    const rigid::RigidBody body(desc);
+    std::vector<RigidBodyInstance> instances;
+    instances.reserve(bodyCount);
 
-    std::cout << "GyPhysics Day 1 example\n"
-              << "Real type: " << math::realTypeName() << '\n'
-              << "Mass: " << body.mass() << '\n'
-              << "Position: " << body.state().position.transpose() << '\n';
+    const math::Real bodyMass = math::Real{1};
+    const math::Real density = bodyMass / tetrahedron->volume();
+
+    for (std::size_t index = 0; index < bodyCount; ++index) {
+        rigid::RigidBodyDesc desc;
+        desc.massProperties.mass = bodyMass;
+        desc.massProperties.centerOfMassLocalPosition =
+            tetrahedron->centroid();
+        desc.massProperties.inertiaTensorLocalAtCenterOfMass =
+            density * tetrahedron->unitDensityInertiaAtCentroid();
+        desc.initialState.position = math::Vector3(
+            math::Real{2} * static_cast<math::Real>(index % bodiesPerRow),
+            math::Real{2} * static_cast<math::Real>(index / bodiesPerRow),
+            math::Real{0}
+        );
+
+        const rigid::BodyId bodyId = bodyRegistry.add(rigid::RigidBody(desc));
+        instances.push_back(RigidBodyInstance{bodyId, tetrahedronShapeId});
+    }
+
+    std::cout << "Created " << bodyRegistry.size()
+              << " rigid bodies sharing tetrahedron shape "
+              << tetrahedronShapeId.value << "\n";
+
+    for (const RigidBodyInstance& instance : instances) {
+        const rigid::RigidBody& body = bodyRegistry.get(instance.bodyId);
+        std::cout << "body " << instance.bodyId.value
+                  << ", shape " << instance.shapeId.value
+                  << ", position "
+                  << body.state().position.transpose() << '\n';
+    }
 
     return 0;
 }

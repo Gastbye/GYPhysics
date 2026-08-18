@@ -1,6 +1,7 @@
 add_library(
     gyphysics_rigid
     src/RigidBody.cpp
+    src/RigidBodyRegistry.cpp
 )
 add_library(GyPhysics::Rigid ALIAS gyphysics_rigid)
 
