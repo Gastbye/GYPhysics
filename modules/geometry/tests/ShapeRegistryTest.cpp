@@ -8,9 +8,9 @@
 #include <type_traits>
 #include <utility>
 
-#include "gy/physics/shape/ShapeRegistry.h"
-#include "gy/physics/shape/SphereShape.h"
-#include "gy/physics/shape/TriMeshShape.h"
+#include "gy/physics/geometry/ShapeRegistry.h"
+#include "gy/physics/geometry/SphereShape.h"
+#include "gy/physics/geometry/TriMeshShape.h"
 
 namespace {
 

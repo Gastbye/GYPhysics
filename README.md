@@ -20,7 +20,7 @@ GyPhysics/
 │   │       ├── MathOperatorsTest.cpp
 │   │       └── QuaternionOperatorsTest.cpp
 │   ├── geometry/
-│   │   ├── include/gy/physics/shape/
+│   │   ├── include/gy/physics/geometry/
 │   │   │   ├── Shape.h
 │   │   │   ├── ShapeStruct.h
 │   │   │   ├── ShapeRegistry.h

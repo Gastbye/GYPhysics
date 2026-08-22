@@ -1,4 +1,4 @@
-#include "gy/physics/shape/TriMeshData.h"
+#include "gy/physics/geometry/TriMeshData.h"
 
 #include <algorithm>
 #include <cmath>

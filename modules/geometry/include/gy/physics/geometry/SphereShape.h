@@ -8,7 +8,7 @@
 #include <stdexcept>
 
 #include "gy/physics/math/MathTypes.h"
-#include "gy/physics/shape/Shape.h"
+#include "gy/physics/geometry/Shape.h"
 
 namespace gy::physics::geometry {
 

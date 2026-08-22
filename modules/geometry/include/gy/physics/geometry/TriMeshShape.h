@@ -8,8 +8,8 @@
 #include <stdexcept>
 #include <utility>
 
-#include "gy/physics/shape/Shape.h"
-#include "gy/physics/shape/TriMeshData.h"
+#include "gy/physics/geometry/Shape.h"
+#include "gy/physics/geometry/TriMeshData.h"
 
 namespace gy::physics::geometry {
 

@@ -5,7 +5,7 @@
 #include <string>
 #include <utility>
 
-#include "gy/physics/shape/TriMeshData.h"
+#include "gy/physics/geometry/TriMeshData.h"
 
 namespace {
 

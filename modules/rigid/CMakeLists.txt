@@ -1,6 +1,7 @@
 add_library(
     gyphysics_rigid
     src/RigidBody.cpp
+    src/RigidBodyActor.cpp
     src/RigidBodyRegistry.cpp
 )
 add_library(GyPhysics::Rigid ALIAS gyphysics_rigid)
@@ -12,7 +13,14 @@ target_include_directories(
         $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(gyphysics_rigid PUBLIC GyPhysics::Math GyPhysics::Mechanics)
+target_link_libraries(
+    gyphysics_rigid
+    PUBLIC
+        GyPhysics::Math
+        GyPhysics::Mechanics
+        GyPhysics::Material
+        GyPhysics::Geometry
+)
 target_compile_features(gyphysics_rigid PUBLIC cxx_std_17)
 gyphysics_enable_warnings(gyphysics_rigid)
 

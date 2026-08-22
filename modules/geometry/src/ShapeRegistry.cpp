@@ -1,4 +1,4 @@
-#include "gy/physics/shape/ShapeRegistry.h"
+#include "gy/physics/geometry/ShapeRegistry.h"
 
 #include <cstddef>
 #include <memory>

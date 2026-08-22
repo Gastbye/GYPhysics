@@ -6,6 +6,8 @@
 
 #include "gy/physics/math/MathTypes.h"
 #include "gy/physics/mechanics/Mechanics.h"
+#include "gy/physics/geometry/ShapeStruct.h"
+#include "gy/physics/material/MaterialStruct.h"
 
 namespace gy::physics::rigid {
 
@@ -59,6 +61,22 @@ struct BodyId
     {
         return !(lhs == rhs);
     }
+};
+
+struct RigidBodyShapeAttachment
+{
+    geometry::ShapeId shapeId{};
+    material::MaterialId materialId{};
+
+    // Position relative to the actor reference frame.
+    math::Vector3 localPosition{
+        math::Vector3::Zero()
+    };
+
+    // Orientation from the shape frame to the actor frame.
+    math::Quaternion localOrientation{
+        math::Quaternion::Identity()
+    };
 };
 
 } // namespace gy::physics::rigid

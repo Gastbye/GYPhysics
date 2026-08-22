@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "gy/physics/math/MathTypes.h"
-#include "gy/physics/shape/ShapeStruct.h"
+#include "gy/physics/geometry/ShapeStruct.h"
 
 namespace gy::physics::geometry {
 

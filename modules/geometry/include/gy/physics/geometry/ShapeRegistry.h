@@ -8,8 +8,8 @@
 #include <memory>
 #include <vector>
 
-#include "gy/physics/shape/Shape.h"
-#include "gy/physics/shape/ShapeStruct.h"
+#include "gy/physics/geometry/Shape.h"
+#include "gy/physics/geometry/ShapeStruct.h"
 
 namespace gy::physics::geometry {
 

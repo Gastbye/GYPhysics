@@ -6,9 +6,9 @@
 #include <string>
 #include <utility>
 
-#include "gy/physics/shape/SphereShape.h"
-#include "gy/physics/shape/TriMeshData.h"
-#include "gy/physics/shape/TriMeshShape.h"
+#include "gy/physics/geometry/SphereShape.h"
+#include "gy/physics/geometry/TriMeshData.h"
+#include "gy/physics/geometry/TriMeshShape.h"
 
 namespace {
 
